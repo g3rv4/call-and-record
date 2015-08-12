@@ -1,7 +1,9 @@
 from peewee import *
 import pytz
+import os
+from settings import settings
 
-db = SqliteDatabase('call_and_record.db')
+db = SqliteDatabase(os.path.join(settings['sqlite_path'], 'call_and_record.db'))
 
 
 class ScheduledCall(Model):

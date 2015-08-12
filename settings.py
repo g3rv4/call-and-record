@@ -1,4 +1,5 @@
 settings = {
+    'sqlite_path': '',
     'email': {
         'aws': {
             'access_key_id': '',
