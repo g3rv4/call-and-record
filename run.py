@@ -19,8 +19,15 @@ if len(calls_to_start):
             content += "Context: supercontext\n"
             content += "Extension: _%s_%s\n" % (seconds, call.dtmf)
             content += "Priority: 2\n"
-            with open(os.path.join(settings['asterisk']['call_file_path'], 'call%i.call' % call.id), 'w') as f:
-                f.write(content)
+
+            # first save it and then move it so that it's an atomic operation
+            f = open(os.path.join('/tmp', 'call%i.call' % call.id), 'w')
+            f.write(content)
+            f.flush()
+            os.fsync(f.fileno())
+            f.close()
+            
+            os.rename(os.path.join('/tmp', 'call%i.call' % call.id), os.path.join(settings['asterisk']['call_file_path'], 'call%i.call' % call.id))
 
         call.started = True
         call.save()
